@@ -1,67 +1,103 @@
-# THAZ Decoration — Static Website
+# THAZ Decoration
 
-Responsive, editorial wedding-decoration portfolio based on the supplied **final** visual reference (5 November 2026). Replaces the previous dark/light serif layout entirely. Built with Next.js App Router, strict TypeScript, and custom CSS; no backend, database, or authentication.
+Website portfolio statis untuk **THAZ Decoration**, studio dekorasi pernikahan yang berbasis di Solo, Jawa Tengah. Website menampilkan profil studio, pilihan karya, arsip berdasarkan lokasi, dan kanal konsultasi dalam desain editorial yang responsif.
 
-## Local setup
+## Status proyek
 
-Requires Node.js 20.9+ (Node 22 LTS recommended).
+**Frontend implementation / content staging.** Struktur halaman dan navigasi telah dibuat, tetapi media saat ini masih berupa potongan dari referensi desain. Sebelum publikasi, ganti dengan foto asli yang telah mendapat izin penggunaan dan verifikasi seluruh informasi proyek.
+
+## Tech stack
+
+- Next.js 16 (App Router, static export)
+- React 19 dan TypeScript (strict mode)
+- Custom CSS untuk responsive layout
+- Vitest untuk pengujian data dan ESLint untuk static analysis
+
+Website tidak memerlukan backend, database, autentikasi, atau CMS pada fase statis ini.
+
+## Menjalankan project
+
+Persyaratan: **Node.js 20.9+** (direkomendasikan Node.js 22 LTS) dan npm.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Buka `http://localhost:3000`.
 
-### Checks
+### Perintah pengembangan
 
-```bash
-npm run typecheck
-npm run lint
-npm run test
-npm run build
-```
+| Perintah | Fungsi |
+| --- | --- |
+| `npm run dev` | Menjalankan development server |
+| `npm run typecheck` | Memeriksa tipe TypeScript |
+| `npm run lint` | Menjalankan ESLint |
+| `npm run test` | Menjalankan pengujian Vitest |
+| `npm run build` | Menghasilkan website statis ke folder `out/` |
+| `npm run check` | Menjalankan seluruh pemeriksaan dan build secara berurutan |
 
-`npm run build` creates a fully static export in `out/` (`output: "export"`). Deploy the `out/` folder on any static host. Set `NEXT_PUBLIC_SITE_URL` to your production domain before deploying.
+## Rute halaman
 
-> **Note:** Dependencies could not be installed in the author's sandbox due to an unavailable npm registry. A real Next.js build was **not** verified here. The standalone preview (`preview.html`) was rendered and smoke-tested in Chromium across three screen widths. Run all four commands above before production.
+| Rute | Deskripsi |
+| --- | --- |
+| `/` | Homepage: hero, tentang, pilihan karya, arsip venue, dan kontak |
+| `/portfolio` | Indeks wilayah portfolio |
+| `/portfolio/[city]` | Arsip karya berdasarkan wilayah |
+| `/karya/[slug]` | Detail karya |
 
-## Routes
+Rute dinamis dibuat saat build berdasarkan data lokal bertipe.
 
-- `/` — Homepage with hero, about, selected work, region archives, and contact.
-- `/portfolio` — All supported regions.
-- `/portfolio/[city]` — City archive; shows a truthful empty state until real entries are imported.
-- `/karya/[slug]` — Featured project preview; currently `tania-ezra` and `salsa-alfi`.
-
-## Architecture
+## Struktur project
 
 ```text
 src/
-  app/                   # Next.js routes, global styles, metadata
-  components/shared/     # Navigation, section label, links, footer
-  config/site.ts         # Verified brand and contact configuration
-  modules/home/components/
-  modules/portfolio/
-    components/          # Archive presentation
-    data/                # Static city/project entries
-    lib/                 # Filtering and lookup functions
-    types/               # TypeScript content contracts
-docs/                    # Architecture and editorial asset notes
-public/images/           # Local reference assets
-preview.html             # Portable HTML preview, no dependencies
+├── app/                       # Routing, metadata, global styles
+├── components/shared/         # Komponen UI bersama
+├── config/site.ts             # Identitas brand, URL, dan kontak
+└── modules/
+    ├── home/components/      # Section homepage
+    └── portfolio/
+        ├── components/       # UI portfolio
+        ├── data/             # Data project dan wilayah
+        ├── lib/              # Helper pencarian data
+        └── types/            # TypeScript contracts
+public/images/                # Media lokal
+tests/                        # Automated tests
+docs/                         # Dokumentasi teknis dan konten
+preview.html                  # Preview visual mandiri
 ```
 
-## IMPORTANT: placeholder media & content
+Komponen dibagi berdasarkan tanggung jawab. Data portfolio tidak ditempatkan langsung dalam komponen presentasi; arsitektur tidak menambahkan layer server yang tidak dibutuhkan.
 
-The new reference image was supplied as a screenshot, not original photography. To match the composition, the current local images were cropped from that screenshot. **These are temporary low-resolution visual assets.** Replace them with original licensed images while preserving their filename or updating the corresponding `src` in the components. Project titles `Tania & Ezra` and `Salsa & Alfi` appear in the reference; **their actual photo documentation and region metadata have not been verified**.
+## Pengelolaan konten
 
-The supplied Notion link could not be read with the current access. Therefore, do not treat placeholder images or empty city archives as imported portfolio data. When an export is available, map verified records into `src/modules/portfolio/data/projects.ts` (or a future statically generated content source). The content format is documented in `docs/CONTENT.md`.
+- `src/modules/portfolio/data/projects.ts`: judul, slug, lokasi, deskripsi, dan foto karya.
+- `src/modules/portfolio/data/regions.ts`: daftar lokasi arsip.
+- `src/config/site.ts`: konfigurasi identitas dan kontak.
+- `public/images/`: foto asli dan aset visual.
 
-The Instagram profile is based on the social media link attached to THAZ Decoration's publicly listed verified Glints company profile. Confirm with the business owner before launching. No WhatsApp number was invented; add it in `src/config/site.ts` only after verification.
+Gunakan slug yang unik, teks alternatif gambar yang deskriptif, dan hanya tetapkan lokasi setelah terverifikasi. Panduan rinci tersedia di [docs/CONTENT.md](docs/CONTENT.md).
 
-## Design rules
+## Responsive design
 
-- **This final screenshot is the visual baseline.** Do not revert to previous white sections, serif typography, dense cards, or generic project grids.
-- Keep the mobile layout editorial rather than shrinking the desktop design.
-- Maintain meaningful alt text, focus states, keyboard-accessible mobile menu and reduced-motion support.
-- Avoid external UI libraries, unnecessary API routes and server-only behavior.
+Komposisi desktop mengikuti desain editorial yang disetujui. Section **Pilihan Karya** menggunakan CSS Grid khusus layar hingga 700 px supaya hierarki judul, gambar, dan tautan proyek tetap terbaca tanpa tumpang tindih. Section lain tidak diubah oleh penyesuaian ini.
+
+## Build dan deployment
+
+Konfigurasi `next.config.ts` menggunakan `output: "export"` dan `trailingSlash: true`. Jalankan `npm run build`, lalu deploy isi folder `out/` ke penyedia hosting statis.
+
+Setel `NEXT_PUBLIC_SITE_URL` menjadi domain produksi **sebelum build** untuk memastikan metadata URL sesuai. Contohnya tersedia di `.env.example`.
+
+### Checklist sebelum rilis
+
+1. Ganti semua media hasil crop screenshot dengan aset resmi dan berlisensi.
+2. Verifikasi nama pasangan, deskripsi, penempatan wilayah, dan izin publikasi.
+3. Pastikan tautan konsultasi dan kontak telah disetujui THAZ.
+4. Jalankan `npm run check` dan periksa output build.
+5. Periksa navigasi, gambar, dan layout pada lebar layar 320, 390, 768, serta 1440 px.
+
+## Dokumentasi
+
+- [Arsitektur dan keputusan teknis](docs/ARCHITECTURE.md)
+- [Panduan konten dan aset visual](docs/CONTENT.md)

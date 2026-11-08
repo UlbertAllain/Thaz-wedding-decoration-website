@@ -198,20 +198,76 @@ img { display: block; }
   .about h2 { font-size: clamp(31px, 8vw, 53px); }
   .about__photo { height: 90px; }
   .about__aside p { font-size: 12px; line-height: 1.75; margin: 22px 0; }
-  .featured { padding-bottom: 55px; }
-  .featured__mosaic { margin-top: 28px; height: clamp(440px, 123vw, 710px); }
-  .featured__candles { width: 42%; height: 37%; left: 0; top: 0; }
-  .featured__fabric { width: 35%; height: 16%; top: 0; right: 0; }
-  .featured__statement { width: 50%; height: 25%; left: 47%; top: 19%; }
-  .featured__statement h2 { font-size: clamp(13px, 3.25vw, 19px); line-height: 1.42; }
-  .accent-rule { width: 30px; height: 2px; }
-  .featured__project { gap: 6px; padding-left: 12px; border-left-width: 1px; }
-  .featured__project small { font-size: 8px; }
-  .featured__project strong { font-size: clamp(13px, 3.2vw, 20px); }
-  .featured__project--one { top: 41%; left: 54%; }
-  .featured__project--two { top: 68%; left: 0; }
-  .featured__roses { top: 65%; left: 39%; width: 32%; height: 20%; }
-  .featured__shadows { top: 84%; right: 0; width: 58%; height: 16%; }
+  /* Mobile-only editorial layout: content determines height and reading flow. */
+  .featured { padding-bottom: 60px; }
+  .featured__mosaic {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto clamp(96px, 30vw, 160px) clamp(100px, 29vw, 155px) clamp(110px, 33vw, 190px) clamp(90px, 25vw, 145px);
+    gap: 18px 10px;
+    height: auto;
+    margin-top: 22px;
+  }
+  .featured__mosaic > * {
+    position: relative;
+    inset: auto;
+    width: auto;
+    height: auto;
+    min-width: 0;
+  }
+  .featured__statement {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    gap: 16px;
+    padding: 13px 0 22px;
+  }
+  .featured__statement h2 {
+    font-size: clamp(21px, 5.6vw, 31px);
+    line-height: 1.27;
+  }
+  .featured__statement .accent-rule:last-child { align-self: flex-end; }
+  .accent-rule { width: 38px; height: 2px; }
+  .featured__candles {
+    grid-column: 1 / 8;
+    grid-row: 2 / 4;
+  }
+  .featured__fabric {
+    grid-column: 9 / -1;
+    grid-row: 2;
+  }
+  .featured__project {
+    gap: 7px;
+    min-height: 0;
+    padding-left: 11px;
+    border-left-width: 1px;
+  }
+  .featured__project small { font-size: 9px; }
+  .featured__project strong {
+    font-size: clamp(13px, 3.6vw, 18px);
+    line-height: 1.35;
+    white-space: normal;
+  }
+  .featured__project--one {
+    grid-column: 9 / -1;
+    grid-row: 3;
+    align-self: start;
+  }
+  .featured__project--two {
+    grid-column: 1 / 6;
+    grid-row: 4;
+    align-self: center;
+  }
+  .featured__roses {
+    grid-column: 7 / -1;
+    grid-row: 4;
+  }
+  .featured__shadows {
+    grid-column: 1 / 9;
+    grid-row: 5;
+  }
   .venues { padding-bottom: 56px; }
   .venues__intro { display: flex; flex-direction: column; gap: 13px; margin-top: 35px; }
   .venues__intro h2 { font-size: clamp(30px, 8.2vw, 53px); }
